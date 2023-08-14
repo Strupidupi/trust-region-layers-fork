@@ -1,6 +1,6 @@
 {
   "exp_name": "",
-  "game": "HalfCheetah-v2",
+  "game": "HalfCheetah-v4",
   "n_envs": 1,
   "n_test_envs": 5,
   "rollout_steps": 2048,
@@ -18,7 +18,7 @@
   "clip_rewards": 0.0,
   "clip_advantages": 0.0,
 
-  "proj_type": "w2",
+  "proj_type": "kl",
   "entropy_eq": false,
   "entropy_first": false,
   "scale_prec": true,
@@ -34,7 +34,7 @@
   "lr_vf": 0.00075,
   "lr_schedule": "",
 
-  "train_steps": 1465,
+  "train_steps": 2,
   "epochs": 20,
   "val_epochs": 10,
 

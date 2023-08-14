@@ -141,7 +141,7 @@ def gaussian_wasserstein_commutative(policy: AbstractGaussianPolicy, p: Tuple[ch
         batch_dim, dim = mean.shape
 
         identity = ch.eye(dim, dtype=sqrt.dtype, device=sqrt.device)
-        sqrt_inv_other = ch.solve(identity, sqrt_other)[0]
+        sqrt_inv_other = ch.linalg.solve(identity, sqrt_other)[0]
         c = sqrt_inv_other @ cov @ sqrt_inv_other
 
         cov_part = torch_batched_trace(identity + c - 2 * sqrt_inv_other @ sqrt)
