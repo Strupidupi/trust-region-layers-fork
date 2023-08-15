@@ -1,0 +1,79 @@
+{
+    "os": "Linux-5.15.0-78-generic-x86_64-with-glibc2.31",
+    "python": "3.9.17",
+    "heartbeatAt": "2023-08-15T09:51:11.622088",
+    "startedAt": "2023-08-15T09:51:10.790976",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "configs/pg/mujoco_config.json"
+    ],
+    "state": "running",
+    "program": "/home/erwin/PycharmProjects/trust-region-layers-fork/main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "git@github.com:Strupidupi/trust-region-layers-fork.git",
+        "commit": "77e44f3f6a288c1d5a2088c4f9f0fb804d01c428"
+    },
+    "email": "Mueller3@fzi.de",
+    "root": "/home/erwin/PycharmProjects/trust-region-layers-fork",
+    "host": "erwin-Inspiron-5490",
+    "username": "erwin",
+    "executable": "/home/erwin/anaconda3/envs/trust-region-layers-fork/bin/python3",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 2358.955625,
+        "min": 400.0,
+        "max": 4900.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 3143.561,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        },
+        {
+            "current": 2300.0,
+            "min": 400.0,
+            "max": 4900.0
+        }
+    ],
+    "disk": {
+        "total": 34.53770446777344,
+        "used": 22.17920684814453
+    },
+    "memory": {
+        "total": 11.466358184814453
+    }
+}
