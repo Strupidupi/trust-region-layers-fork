@@ -19,7 +19,7 @@ import json
 import logging
 from glob import glob
 from multiprocessing import JoinableQueue, Process
-
+import wandb
 import os
 
 from trust_region_projections.algorithms.pg.pg import PolicyGradient
@@ -92,6 +92,14 @@ def single_run(agent_config: str, agent_generator: callable):
 
 
 if __name__ == '__main__':
+
+    run = wandb.init(
+        project="fancy_gym with trust_region_layers",
+        sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
+        monitor_gym=True,  # auto-upload the videos of agents playing the game
+        save_code=False,  # optional
+    )
+
     parser = argparse.ArgumentParser(description='Run one or multiple runs for testing or plots.')
     parser.add_argument('path', type=str, help='Path to base config or root of experiment to load.')
     # parser.add_argument('--algorithm', type=str, default="pg", help='Specify which algorithm to use.')
@@ -111,6 +119,7 @@ if __name__ == '__main__':
             while True:
                 _, eval_dict = agent.evaluate_policy(0, render=True, deterministic=True)
                 print(eval_dict)
+                wandb.log(eval_dict)
         else:
             agent.learn()
         agent.store.close()

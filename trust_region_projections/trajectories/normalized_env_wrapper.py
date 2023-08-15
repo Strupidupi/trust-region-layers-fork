@@ -20,6 +20,8 @@ from typing import Union
 from trust_region_projections.trajectories.env_normalizer import BaseNormalizer, MovingAvgNormalizer
 from trust_region_projections.trajectories.vector_env import SequentialVectorEnv
 
+import fancy_gym.myCartpole.cartpole
+
 
 def make_env(env_id: str, seed: int, rank: int) -> callable:
     """
@@ -35,7 +37,8 @@ def make_env(env_id: str, seed: int, rank: int) -> callable:
     """
 
     def _get_env():
-        env = gym.make(env_id)
+        #env = gym.make(env_id)
+        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP()
         env.seed(seed + rank)
         return env
 

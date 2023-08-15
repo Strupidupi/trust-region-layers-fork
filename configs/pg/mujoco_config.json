@@ -1,6 +1,6 @@
 {
   "exp_name": "",
-  "game": "HalfCheetah-v4",
+  "game": "dm_control/cartpole-swingup-v0",
   "n_envs": 1,
   "n_test_envs": 5,
   "rollout_steps": 2048,

@@ -23,6 +23,7 @@ from typing import Union
 import gym
 import numpy as np
 import torch as ch
+import wandb
 
 from trust_region_projections.algorithms.abstract_algo import AbstractAlgorithm
 from trust_region_projections.models.policy.abstract_gaussian_policy import AbstractGaussianPolicy
@@ -36,6 +37,8 @@ from trust_region_projections.utils.custom_store import CustomStore
 from trust_region_projections.utils.network_utils import get_lr_schedule, get_optimizer
 from trust_region_projections.utils.torch_utils import flatten_batch, generate_minibatches, get_numpy, \
     select_batch, tensorize
+
+import fancy_gym.myCartpole.cartpole
 
 logging.basicConfig(level=logging.INFO)
 
@@ -514,6 +517,9 @@ class PolicyGradient(AbstractAlgorithm):
         for epoch in range(self._global_steps, self.train_steps):
             metrics_dict, rewards_dict = self.step()
 
+            wandb.log(metrics_dict)
+            wandb.log({'loss': metrics_dict["loss"]})
+
             if self.log_interval != 0 and self._global_steps % self.log_interval == 0 and self.advanced_logging:
                 self.logger.info("-" * 80)
                 metrics = ", ".join((*map(lambda kv: f'{kv[0]}={get_numpy(kv[1]):.4f}', metrics_dict.items()),))
@@ -625,7 +631,8 @@ class PolicyGradient(AbstractAlgorithm):
 
         print(params)
 
-        env = gym.make(params['game'])
+        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP()
+        #env = gym.make(params['game'])
         obs_dim = env.observation_space.shape[0]
         action_dim = env.action_space.shape[0]
 
