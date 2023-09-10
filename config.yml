@@ -1,0 +1,26 @@
+---
+name: "DEFAULT"
+path: "cw2_results"   # location to save results in
+repetitions: 1    # number of times one set of parameters is run
+params:
+  key: 'value'
+---
+# Experiment 1
+
+
+name: "experiment_1"
+
+# Experiment Parameters:
+params:
+  wandb_name: 'experiment_1'
+  train_steps: 1
+---
+# Experiment 2
+
+
+name: "experiment_2"
+
+# Experiment Parameters:
+params:
+  wandb_name: 'experiment_2'
+  train_steps: 2

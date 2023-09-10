@@ -128,3 +128,61 @@ if __name__ == '__main__':
         multithreaded_run(path, get_new_ppo_agent, num_threads=args.num_threads)
     else:
         single_run(path, get_new_ppo_agent)
+
+def update_mujoco_configs_for_cw2(path: str, d: dict):
+    with open(path, 'r') as json_file:
+        mujoco_configs = json.load(json_file)
+
+    # Modify the data
+    for key in d:
+        if key in mujoco_configs:
+            mujoco_configs[key] = d[key]
+
+
+    # Save the modified data back to the JSON file
+    with open(path, 'w') as json_file:
+        json.dump(mujoco_configs, json_file, indent=4)
+def entrypoint_for_cw2(d:dict):
+
+    run = wandb.init(
+        project="fancy_gym with trust_region_layers",
+        config=d,
+        name=d['wandb_name'],
+        sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
+        monitor_gym=True,  # auto-upload the videos of agents playing the game
+        save_code=False,  # optional
+    )
+
+    parser = argparse.ArgumentParser(description='Run one or multiple runs for testing or plots.')
+    parser.add_argument('path', type=str, help='Path to base config or root of experiment to load.')
+    # parser.add_argument('--algorithm', type=str, default="pg", help='Specify which algorithm to use.')
+    parser.add_argument('--load-exp-name', type=str, default=None, help='Load model from specified location.')
+    parser.add_argument('--train-steps', type=int, default=None, help='New total training steps.', )
+    parser.add_argument('--test', action='store_true', help='Only test loaded model.', )
+    parser.add_argument('--num-threads', type=int, default=10,
+                        help='Number of threads for running multiple experiments.', )
+    args = parser.parse_args()
+
+    path = "configs/pg/mujoco_config.json"
+
+    #update the values in configs/pg/mujoco_config.json with the dict d
+    update_mujoco_configs_for_cw2(path, d)
+
+    if args.load_exp_name:
+        store = CustomStore(storage_folder=path, exp_id=args.load_exp_name, new=not args.test)
+        agent, agent_params = PolicyGradient.agent_from_data(store, args.train_steps)
+        if args.test:
+            while True:
+                _, eval_dict = agent.evaluate_policy(0, render=True, deterministic=True)
+                print(eval_dict)
+                # wandb.log(eval_dict)
+        else:
+            agent.learn()
+        agent.store.close()
+
+    if not os.path.isfile(path):
+        multithreaded_run(path, get_new_ppo_agent, num_threads=args.num_threads)
+    else:
+        single_run(path, get_new_ppo_agent)
+
+    run.finish()

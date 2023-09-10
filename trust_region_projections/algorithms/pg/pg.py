@@ -518,7 +518,7 @@ class PolicyGradient(AbstractAlgorithm):
             metrics_dict, rewards_dict = self.step()
 
             wandb.log(metrics_dict)
-            wandb.log({'loss': metrics_dict["loss"]})
+            #wandb.log({'loss': metrics_dict["loss"]})
 
             if self.log_interval != 0 and self._global_steps % self.log_interval == 0 and self.advanced_logging:
                 self.logger.info("-" * 80)
