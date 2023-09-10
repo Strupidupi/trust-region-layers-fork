@@ -123,3 +123,6 @@ venv.bak/
 */dist
 */pybind11
 */.idea
+
+#wandb
+/wandb
