@@ -1,24 +1,41 @@
 from cw2 import experiment, cw_error
 from cw2.cw_data import cw_logging
 from cw2 import cluster_work
+from cw2.cw_data.cw_wandb_logger import WandBLogger
 
 import main
+from utils.get_agent import get_new_ppo_agent
 
+def create_wandb_dict(metrics_dict: dict, rewards_dict: dict):
+    wandb_dict = metrics_dict.copy()
+    wandb_dict.update(rewards_dict)
+    return wandb_dict
 
-class MyExperiment(experiment.AbstractExperiment):
-    # ...
+class MyExperiment(experiment.AbstractIterativeExperiment):
 
     def initialize(self, config: dict, rep: int, logger: cw_logging.LoggerArray) -> None:
         pass
         # Skip for Quickguide
+        params = config["params"]
+        params['train_steps'] = config['iterations']
+        params['exp_name'] = config['name']
+        self.agent = get_new_ppo_agent(params)
 
-    def run(self, config: dict, rep: int, logger: cw_logging.LoggerArray) -> None:
-        # Perform your existing task
-        main.entrypoint_for_cw2(config.get("params"))
+    def iterate(self, cw_config: dict, rep: int, n: int) -> dict:
+        metrics_dict, rewards_dict = self.agent.step()
+        if self.agent.save_interval > 0 and n % self.agent.save_interval == 0:
+            self.agent.save(n)
+        wandb_dict = create_wandb_dict(metrics_dict, rewards_dict)
+        return wandb_dict
 
     def finalize(self, surrender: cw_error.ExperimentSurrender = None, crash: bool = False):
         pass
         # Skip for Quickguide
+        if not crash:
+            self.agent.save(self.agent.train_steps)
+
+    def save_state(self, cw_config: dict, rep: int, n: int) -> None:
+        pass
 
 
 if __name__ == "__main__":
@@ -26,7 +43,7 @@ if __name__ == "__main__":
     cw = cluster_work.ClusterWork(MyExperiment)
 
     # Optional: Add loggers
-    #cw.add_logger(...)
+    cw.add_logger(WandBLogger())
 
     # RUN!
     cw.run()

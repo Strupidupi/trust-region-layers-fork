@@ -26,6 +26,8 @@ from trust_region_projections.trajectories.dataclass import TrajectoryOnPolicyRa
 from trust_region_projections.trajectories.normalized_env_wrapper import NormalizedEnvWrapper
 from trust_region_projections.utils.torch_utils import get_numpy, tensorize, to_gpu
 
+#import wandb
+
 logger = logging.getLogger("env_runner")
 
 
@@ -160,6 +162,18 @@ class TrajectorySampler(object):
         Returns:
             Dict with performance metrics.
         """
+
+        # config = {
+        #     "example": "example"
+        # }
+        #
+        # run = wandb.init(
+        #     project="trust-region-layer",
+        #     sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
+        #     monitor_gym=True,  # auto-upload the videos of agents playing the game
+        #     save_code=False,  # optional
+        # )
+
         if self.n_test_envs == 0:
             return
         n_runs = 1

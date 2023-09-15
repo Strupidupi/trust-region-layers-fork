@@ -23,7 +23,7 @@ from typing import Union
 import gym
 import numpy as np
 import torch as ch
-import wandb
+#import wandb
 
 from trust_region_projections.algorithms.abstract_algo import AbstractAlgorithm
 from trust_region_projections.models.policy.abstract_gaussian_policy import AbstractGaussianPolicy
@@ -516,9 +516,8 @@ class PolicyGradient(AbstractAlgorithm):
         epoch = self._global_steps
         for epoch in range(self._global_steps, self.train_steps):
             metrics_dict, rewards_dict = self.step()
+            # wandb.log(metrics_dict)
 
-            wandb.log(metrics_dict)
-            #wandb.log({'loss': metrics_dict["loss"]})
 
             if self.log_interval != 0 and self._global_steps % self.log_interval == 0 and self.advanced_logging:
                 self.logger.info("-" * 80)

@@ -19,7 +19,7 @@ from typing import Sequence
 
 import gym
 import numpy as np
-
+#import wandb
 
 class SequentialVectorEnv(gym.Env):
 
@@ -41,6 +41,22 @@ class SequentialVectorEnv(gym.Env):
         self.length_counter = np.zeros((self.num_envs,))
         self.total_ep_reward = np.zeros((self.num_envs,))
 
+    def logToWandb(self, action, obs, i):
+        if i != 0:
+            return
+        if type(obs) is tuple:
+            pos = obs[0]['position']
+        else:
+            pos = obs['position']
+
+        log_dict= {
+            "cart/action" + str(i): np.clip(action, -1, 1),
+            "cart/pose" + str(i): pos[0],
+            "cart/sin" + str(i): pos[1],
+            "cart/cos" + str(i): pos[2]
+        }
+        #wandb.log(log_dict)
+
     def step(self, actions):
         """
 
@@ -61,6 +77,8 @@ class SequentialVectorEnv(gym.Env):
 
         for i, (action, env) in enumerate(zip(actions, self.envs)):
             obs, rew, done, info = env.step(action)
+
+            # self.logToWandb(action, obs, i)
 
             self.length_counter[i] += 1
             self.total_ep_reward[i] += rew
