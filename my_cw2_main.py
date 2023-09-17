@@ -14,11 +14,11 @@ def create_wandb_dict(metrics_dict: dict, rewards_dict: dict):
 class MyExperiment(experiment.AbstractIterativeExperiment):
 
     def initialize(self, config: dict, rep: int, logger: cw_logging.LoggerArray) -> None:
-        pass
-        # Skip for Quickguide
         params = config["params"]
-        params['train_steps'] = config['iterations']
-        params['exp_name'] = config['name']
+        # necessary if config.yml contains grid or list instead of params, because exp-names have to be different
+        exp_name = config["path"].split("/")[-1]
+        params['exp_name'] = exp_name
+        config['iterations'] = params['train_steps']
         self.agent = get_new_ppo_agent(params)
 
     def iterate(self, cw_config: dict, rep: int, n: int) -> dict:
