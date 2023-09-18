@@ -23,7 +23,7 @@ import numpy as np
 
 class SequentialVectorEnv(gym.Env):
 
-    def __init__(self, env_fns: Sequence[callable], max_episode_length=np.inf):
+    def __init__(self, env_fns: Sequence[callable], max_episode_length=np.inf, fancy_gym_env: str = "swingup-max_planning_4_schedule_250"):
         """
         Sequential vector env, that used multiple gym environments and executes the actions sequentially.
         Args:
@@ -32,7 +32,7 @@ class SequentialVectorEnv(gym.Env):
                                 a time limit).
         """
 
-        self.envs = [f() for f in env_fns]
+        self.envs = [f(fancy_gym_env) for f in env_fns]
         self.num_envs = len(env_fns)
         self.observation_space = self.envs[0].observation_space
         self.action_space = self.envs[0].action_space

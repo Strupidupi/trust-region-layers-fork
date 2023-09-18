@@ -36,9 +36,9 @@ def make_env(env_id: str, seed: int, rank: int) -> callable:
 
     """
 
-    def _get_env():
+    def _get_env(fancy_gym_env : str = "swingup-max_planning_4_schedule_250"):
         #env = gym.make(env_id)
-        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP()
+        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(fancy_gym_env)
         env.seed(seed + rank)
         return env
 
@@ -49,7 +49,7 @@ class NormalizedEnvWrapper(object):
 
     def __init__(self, env_id: str, n_envs: int = 1, n_test_envs: int = 1, max_episode_length: int = 1000, gamma=0.99,
                  norm_obs: Union[bool, None] = True, clip_obs: Union[float, None] = None,
-                 norm_rewards: Union[bool, None] = True, clip_rewards: Union[float, None] = None, seed: int = 1):
+                 norm_rewards: Union[bool, None] = True, clip_rewards: Union[float, None] = None, seed: int = 1, fancy_gym_env: str ="swingup-max_planning_4_schedule_250"):
         """
         A vectorized gym environment wrapper that normalizes observations and returns.
         Args:
@@ -69,7 +69,7 @@ class NormalizedEnvWrapper(object):
         self.max_episode_length = max_episode_length
 
         self.envs = SequentialVectorEnv([make_env(env_id, seed, i) for i in range(n_envs)],
-                                        max_episode_length=max_episode_length)
+                                        max_episode_length=max_episode_length, fancy_gym_env=fancy_gym_env)
         if n_test_envs:
             # Create test envs here to leverage the moving average normalization for testing envs.
             self.envs_test = SequentialVectorEnv([make_env(env_id, seed + n_envs, i) for i in range(n_test_envs)],

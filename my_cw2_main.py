@@ -15,6 +15,7 @@ class MyExperiment(experiment.AbstractIterativeExperiment):
 
     def initialize(self, config: dict, rep: int, logger: cw_logging.LoggerArray) -> None:
         params = config["params"]
+        params['seed'] = rep
         # necessary if config.yml contains grid or list instead of params, because exp-names have to be different
         exp_name = config["path"].split("/")[-1]
         params['exp_name'] = exp_name
@@ -29,8 +30,6 @@ class MyExperiment(experiment.AbstractIterativeExperiment):
         return wandb_dict
 
     def finalize(self, surrender: cw_error.ExperimentSurrender = None, crash: bool = False):
-        pass
-        # Skip for Quickguide
         if not crash:
             self.agent.save(self.agent.train_steps)
 

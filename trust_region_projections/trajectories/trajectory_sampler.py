@@ -35,7 +35,7 @@ class TrajectorySampler(object):
     def __init__(self, env_id: str, n_envs: int = 1, n_test_envs=1, max_episode_length=1000,
                  discount_factor: float = 0.99, norm_obs: Union[bool, None] = bool, clip_obs: Union[float, None] = 10.0,
                  norm_rewards: Union[bool, None] = True, clip_rewards: Union[float, None] = 10.0, cpu: bool = True,
-                 dtype=ch.float32, seed: int = 1):
+                 dtype=ch.float32, seed: int = 1, fancy_gym_env: str = "swingup-max_planning_4_schedule_250"):
 
         """
         Instance that takes care of generating Trajectory samples.
@@ -69,7 +69,7 @@ class TrajectorySampler(object):
 
         self.envs = NormalizedEnvWrapper(env_id, n_envs, n_test_envs, max_episode_length=max_episode_length,
                                          gamma=discount_factor, norm_obs=norm_obs, clip_obs=clip_obs,
-                                         norm_rewards=norm_rewards, clip_rewards=clip_rewards, seed=seed)
+                                         norm_rewards=norm_rewards, clip_rewards=clip_rewards, seed=seed, fancy_gym_env=fancy_gym_env)
 
     def run(self, rollout_steps, policy: AbstractGaussianPolicy, vf_model: Union[VFNet, None] = None,
             reset_envs: bool = False) -> TrajectoryOnPolicyRaw:

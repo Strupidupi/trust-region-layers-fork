@@ -630,7 +630,7 @@ class PolicyGradient(AbstractAlgorithm):
 
         print(params)
 
-        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP()
+        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(params['fancy_gym_env'])
         #env = gym.make(params['game'])
         obs_dim = env.observation_space.shape[0]
         action_dim = env.action_space.shape[0]
@@ -669,7 +669,7 @@ class PolicyGradient(AbstractAlgorithm):
                                        discount_factor=params['discount_factor'], norm_obs=params['norm_observations'],
                                        clip_obs=params['clip_observations'] or 0.0, norm_rewards=params['norm_rewards'],
                                        clip_rewards=params['clip_rewards'] or 0.0, cpu=not use_gpu, dtype=dtype,
-                                       seed=seed)
+                                       seed=seed, fancy_gym_env=params['fancy_gym_env'])
 
         # projections
         projection = get_projection_layer(

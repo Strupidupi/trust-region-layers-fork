@@ -78,26 +78,31 @@ params:
   seed: 28
   dtype: "float64"
 
+  #fancy_gym
+  #(chose between mp1_s1000/mp2_500/mp4_s250/mp5_s200/mp8_s125/mp10_s100)
+  fancy_gym_env: "swingup-max_planning_4_schedule_250"
+
 wandb:
   project: fancy_gym with trust_region_layers
   group: my_group
 ---
-## Slurm config (optional)
-#name: "SLURM"   # MUST BE "SLURM"
-#
-## Required
-#partition: "single"
-#job-name: "fancy_gym"    # this will be the experiment's name in slurm
-#
-#num_parallel_jobs: 120
-#ntasks: 1 # for single partition
-#cpus-per-task: 10
-#time: 4320
-#---
+# Slurm config (optional)
+name: "SLURM"   # MUST BE "SLURM"
+
+# Required
+partition: "single"
+job-name: "fancy_gym"    # this will be the experiment's name in slurm
+
+num_parallel_jobs: 120
+ntasks: 1 # for single partition
+cpus-per-task: 10
+mem-per-cpu: 900
+time: 4320
+---
 name: "experiment_1"
 
-params:
-  train_steps: 1
-  lr: 0.0006
+grid:
+  train_steps: [1]
+  fancy_gym_env: ["swingup-max_planning_4_schedule_250", "swingup-max_planning_5_schedule_200"]
 ---
 
