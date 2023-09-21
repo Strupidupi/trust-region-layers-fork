@@ -73,7 +73,7 @@ class NormalizedEnvWrapper(object):
         if n_test_envs:
             # Create test envs here to leverage the moving average normalization for testing envs.
             self.envs_test = SequentialVectorEnv([make_env(env_id, seed + n_envs, i) for i in range(n_test_envs)],
-                                                 max_episode_length=max_episode_length)
+                                                 max_episode_length=max_episode_length, fancy_gym_env=fancy_gym_env)
 
         self.norm_obs = norm_obs
         self.clip_obs = clip_obs
