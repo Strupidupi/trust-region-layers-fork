@@ -1,3 +1,6 @@
+from collections import deque
+
+import numpy as np
 from cw2 import experiment, cw_error
 from cw2.cw_data import cw_logging
 from cw2 import cluster_work
@@ -21,17 +24,27 @@ class MyExperiment(experiment.AbstractIterativeExperiment):
         params['exp_name'] = exp_name
         config['iterations'] = params['train_steps']
         self.agent = get_new_ppo_agent(params)
+        self._last_5_rews = deque(maxlen=5)
+        self._last_5_rews_test = deque(maxlen=5)
 
     def iterate(self, cw_config: dict, rep: int, n: int) -> dict:
         metrics_dict, rewards_dict = self.agent.step()
         if self.agent.save_interval > 0 and n % self.agent.save_interval == 0:
             self.agent.save(n)
+        self._last_5_rews.append(rewards_dict['exploration']['mean'])
+        self._last_5_rews_test.append(rewards_dict['evaluation']['mean'])
         wandb_dict = create_wandb_dict(metrics_dict, rewards_dict)
         return wandb_dict
 
     def finalize(self, surrender: cw_error.ExperimentSurrender = None, crash: bool = False):
         if not crash:
             self.agent.save(self.agent.train_steps)
+            self.agent.store["final_results"].append_row({
+                'iteration': self.agent.train_steps,
+                '5_rewards': np.array(self._last_5_rews).mean(),
+                '5_rewards_test': np.array(self._last_5_rews_test).mean(),
+            })  #### the following policy evaluation in Fabian's learn() method do not have an effect
+            self.agent.store.close()
 
     def save_state(self, cw_config: dict, rep: int, n: int) -> None:
         pass
@@ -46,3 +59,4 @@ if __name__ == "__main__":
 
     # RUN!
     cw.run()
+    print('clusterworks: done')

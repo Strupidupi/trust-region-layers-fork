@@ -34,7 +34,7 @@
   "lr_vf": 2.5e-4,
   "lr_schedule": "linear",
 
-  "train_steps": 1465,
+  "train_steps": 2,
   "epochs": 10,
   "val_epochs": 10,
 

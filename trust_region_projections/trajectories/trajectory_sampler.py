@@ -87,7 +87,6 @@ class TrajectorySampler(object):
 
         # Here, we init the lists that will contain the mb of experiences
         num_envs = self.n_envs
-
         base_shape = (rollout_steps, num_envs)
         base_shape_p1 = (rollout_steps + 1, num_envs)
         base_action_shape = base_shape + self.envs.action_space.shape

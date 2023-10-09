@@ -16,6 +16,7 @@
 
 import numpy as np
 import torch as ch
+import warnings
 
 
 def torch_batched_trace(x) -> ch.Tensor:
@@ -68,8 +69,11 @@ def cpu_tensorize(x, dtype=None):
     Returns:
         cpu tensor of x
     """
-    dtype = dtype if dtype else x.dtype
-    return ch.tensor(x).type(dtype)
+    #Added ignore for: In future, it will be an error for 'np.bool_' scalars to be interpreted as an index return ch.tensor(x).type(dtype)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        dtype = dtype if dtype else x.dtype
+        return ch.tensor(x).type(dtype)
 
 
 def to_gpu(x):
