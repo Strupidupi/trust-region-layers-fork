@@ -12,7 +12,26 @@ from utils.get_agent import get_new_ppo_agent
 def create_wandb_dict(metrics_dict: dict, rewards_dict: dict):
     wandb_dict = metrics_dict.copy()
     wandb_dict.update(rewards_dict)
-    return wandb_dict
+
+    wandb_dict_sorted = {}
+    exp_eva = ["exploration", "evaluation"]
+    constraint = ["entropy", "kl", "constraint_max", "entropy_max", "entropy_diff", "constraint", "entropy_diff_max",
+                  "mean_constraint_max", "kl_max", "mean_constraint", "cov_constraint", "cov_constraint_max"]
+    loss = ["vf_loss", "trust_region_loss", "entropy_loss", "policy_loss", "loss"]
+
+    for e in wandb_dict:
+        # print(e + " " + str(wandb_dict[e]))
+        if e in constraint:
+            wandb_dict_sorted["constraint" + "/" + e] = wandb_dict[e]
+            continue
+        if e in loss:
+            wandb_dict_sorted["loss" + "/" + e] = wandb_dict[e]
+            continue
+    for name in exp_eva:
+        for e_exp in wandb_dict[name]:
+            wandb_dict_sorted[name + "/" + e_exp] = wandb_dict[name][e_exp]
+
+    return wandb_dict_sorted
 
 class MyExperiment(experiment.AbstractIterativeExperiment):
 
