@@ -38,7 +38,8 @@ from trust_region_projections.utils.network_utils import get_lr_schedule, get_op
 from trust_region_projections.utils.torch_utils import flatten_batch, generate_minibatches, get_numpy, \
     select_batch, tensorize
 
-import fancy_gym.myCartpole.cartpole
+#import fancy_gym.myCartpole.cartpole
+from boschcartpole.Api import makeBoschEnv
 
 logging.basicConfig(level=logging.INFO)
 
@@ -630,7 +631,8 @@ class PolicyGradient(AbstractAlgorithm):
 
         print(params)
 
-        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(params['fancy_gym_env'])
+        env = makeBoschEnv()
+        #env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(params['fancy_gym_env'])
         #env = gym.make(params['game'])
         obs_dim = env.observation_space.shape[0]
         action_dim = env.action_space.shape[0]

@@ -20,7 +20,8 @@ from typing import Union
 from trust_region_projections.trajectories.env_normalizer import BaseNormalizer, MovingAvgNormalizer
 from trust_region_projections.trajectories.vector_env import SequentialVectorEnv
 
-import fancy_gym.myCartpole.cartpole
+#import fancy_gym.myCartpole.cartpole
+from boschcartpole.Api import makeBoschEnv
 
 
 def make_env(env_id: str, seed: int, rank: int) -> callable:
@@ -37,8 +38,9 @@ def make_env(env_id: str, seed: int, rank: int) -> callable:
     """
 
     def _get_env(fancy_gym_env : str = "swingup-max_planning_4_schedule_250"):
+        env = makeBoschEnv()
         #env = gym.make(env_id)
-        env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(fancy_gym_env)
+        # env = fancy_gym.myCartpole.cartpole.cartpole.generateCartpoleEnvProDMP(fancy_gym_env)
         env.seed(seed + rank)
         return env
 
